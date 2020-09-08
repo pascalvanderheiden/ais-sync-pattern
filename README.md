@@ -21,7 +21,7 @@ In this case I've used Cosmos DB to get the messages from, but this can be repla
 
 In DevOps with the build pipeline all shared resources are deployed. The release pipeline deploys the specific services needed for this pattern. In this way are able to deploy, by cloning, multiple sync pattern, using the same shared components for cost optimalization.
 
-Synchronous communication is typical for most common integrations.
+In this DevOps project I've made it possible to deploy to 3 environments by choice. So, you can deploy to a dev, staging and production enviroment in the DevOps project. There are 3 build pipelines which wil provide the deployment of completely seperate enviroments. All shared components are deployed in the build pipelines. In the release pipeline we will do a staged deployment of each environment, with a approval in between. This way you can choose if you want to deploy duplicate environments or not.  
 
 ## Step by Step installation
 
@@ -58,36 +58,39 @@ You can find the documentation on the Azure DevOps Generator here: https://vstsd
 - Go to Pipelines, Library. Click on the Variable group "Shared Resources".
 - Tick "Allow access to all pipelines.
 - Update the values of the variables to match your naming conventions needs. I've put in some generic naming, but you need to update the variables. Otherwise, the creation of some services will fail, because they've been already used.
-- The variable "KVCOSMOSDBLABEL" and "KVSERVICEBUSLABEL" are used as labels for Key Vault to retrieve the connection string and key for API Connections. Leave that as it is: "aissharedcosmosdb" and "aissharedservicebus"
+- The variable "KVCOSMOSDBLABEL" is used as a label for Key Vault to retrieve the connection string and key for API Connections. Leave that as it is: "aissharedcosmosdb"
+- Do the same for the "Environments" Variable group.
 - Don't forget to save.
 
 ### Step 5: In Azure DevOps, update the Build pipeline and Run it.
 - Go to Pipelines, Pipelines.
-- Select "Build Azure Integration Services shared resources-CI", Edit.
+- Select "Build AIS shared resources-env1-CI", Edit.
 - In Tasks, select the Tasks which have the explaination mark "Some settings need attention", and update Azure Subscription to your Service Principal Connection.
 - In Variables, update the variables to match your naming conventions needs. Keep in mind to pick unique naming for exposed services. I've put in some generic naming, but you need to update the variables. Otherwise, the creation of some services will fail, because they've been already used.
+- Repeat this for "Build AIS shared resources-env2-CI" and "Build AIS shared resources-env3-CI".
 - Save & queue.
 - Click the Agent Job to check the progress. Check if everything is create correctly, because of the unique naming for some services. And because it's fun :-)
 - Keep in mind that the CLI scripts will check if the resource is already created, before creating. I've used an ARM Template for the deployment of the Application Insights, because I wanted to automatically integrate it with the API Management Instance I've just created. This is not yet supported in AZ CLI.
 
 ### Step 6: In Azure DevOps, add the Key Vault secret to the variables.
-- Go to Pipelines, Library. Add Variable group. Give it a name, something like "Key Vault Secrets".
+- Go to Pipelines, Library. Add Variable group. Give it a name, something like "Key Vault Secrets Environment 1".
 - Tick "Allow access to all pipelines.
 - Tick "Link secrets from an Azure key vault as variables".
 - Update the Azure Subscription to your Service Principal Connection.
-- Select the Key vault name. If your build pipeline ran succesfully, you can select your Key vault. Add variables, and it will popup with the secrets we've created earlier: "aissharedcosmosdb" and "aissharedservicebus". Select it one by one, OK. And Save.
+- Select the Key vault name. If your build pipeline ran succesfully, you can select your Key vault. Add variables, and it will popup with the secret we've created earlier: "aissharedcosmosdb". Select it one by one, OK. And Save.
+- Do this for each environment.
 
 ### Step 7: In Azure DevOps, update the Release pipeline and Run it.
 - Go to Pipelines, Releases.
 Note. Because I've enabled continuous deployment in my template, there is a failed release there already. You can ignore that, because we are going to fix the release in the step.
-- Select "Release Azure Integration Services async pattern-CD", Edit.
+- Select "Release AIS Synchronous pattern-CD", Edit.
 - In Tasks, select the Tasks which have the explaination mark "Some settings need attention", and update Azure Subscription to your Service Principal Connection.
 - In Variables, update the variables to match the naming you used in the Build pipeline.
-- In Variables groups, link the "Key Vault Secrets" variable group, by clicking the Link button.
+- In Variables groups, link the "Key Vault Secrets" variable group, by clicking the Link button. Scope it to the specific environment stage.
 - Save & Create Release.
 
 ### Step 8: Go to your API Management Instance and test the API
-In the Azure Portal, just go to API Management, APIs, click your new API (Customer), Click the operation POST and click the tab "Test". Past the sample json (in this repo, sample-request.json) into the request body and click Send.
+In the Azure Portal, just go to API Management, APIs, click your new API (Customer), Click the operation GET and click the tab "Test" and click Send.
 
 ## Contributing
 This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
