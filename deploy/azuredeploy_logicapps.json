@@ -1,0 +1,301 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logicAppName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "metadata": {
+        "description": "Name of the Logic App."
+      }
+    },
+    "logicAppLocation": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "allowedValues": [
+        "[resourceGroup().location]",
+        "eastasia",
+        "southeastasia",
+        "centralus",
+        "eastus",
+        "eastus2",
+        "westus",
+        "northcentralus",
+        "southcentralus",
+        "northeurope",
+        "westeurope",
+        "japanwest",
+        "japaneast",
+        "brazilsouth",
+        "australiaeast",
+        "australiasoutheast",
+        "southindia",
+        "centralindia",
+        "westindia",
+        "canadacentral",
+        "canadaeast",
+        "uksouth",
+        "ukwest",
+        "westcentralus",
+        "westus2",
+        "koreacentral",
+        "koreasouth",
+        "francecentral",
+        "francesouth",
+        "southafricanorth",
+        "southafricawest"
+      ],
+      "metadata": {
+        "description": "Location of all the Logic Apps."
+      }
+    },
+    "diagnosticSettings_name": {
+      "type": "string",
+      "defaultValue": "service",
+      "metadata": {
+        "description": "Diagnostic Setting"
+      }
+    },
+    "diagnosticSettings_resourceGroupName": {
+      "type": "string",
+      "defaultValue": "ais-async-rg",
+      "metadata": {
+        "description": "Resource Group of the Log Analytics Workspace"
+      }
+    },
+    "diagnosticSettings_workspaceName": {
+      "type": "string",
+      "defaultValue": "aisasync-ws",
+      "metadata": {
+        "description": "Log Analytics Workspace"
+      }
+    },
+    "documentdb_1_Connection_Name": {
+      "type": "string",
+      "defaultValue": "documentdb",
+      "metadata": {
+        "description": "Cosmos DB Connection Name in Logic App"
+      }
+    },
+    "documentdb_1_Connection_DisplayName": {
+      "type": "string",
+      "defaultValue": "aisasyncosmos-acc",
+      "metadata": {
+        "description": "Cosmos DB Connection Display Name in Logic App"
+      }
+    },
+    "documentdb_1_databaseAccount": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the account without 'documents.azure.com' part"
+      },
+      "defaultValue": "aisasyncosmos-acc"
+    },
+    "documentdb_1_databaseName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Cosmos DB database"
+      },
+      "defaultValue": "aisasync-db"
+    },
+    "documentdb_1_containerName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Cosmos DB container"
+      },
+      "defaultValue": "customer-con"
+    },
+    "documentdb_1_accessKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The Cosmos DB Account Primary or Secondary Key"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "name": "[parameters('logicAppName')]",
+      "type": "Microsoft.Logic/workflows",
+      "location": "[parameters('logicAppLocation')]",
+      "tags": {
+        "displayName": "LogicAppSync"
+      },
+      "apiVersion": "2016-06-01",
+      "properties": {
+        "definition": {
+          "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+          "actions": {
+              "Compose_-_response": {
+                  "inputs": "@body('Get_all_documents')?['Documents']",
+                  "runAfter": {
+                      "Get_all_documents": [
+                          "Succeeded"
+                      ]
+                  },
+                  "type": "Compose"
+              },
+              "Get_all_documents": {
+                  "inputs": {
+                      "host": {
+                          "connection": {
+                              "name": "@parameters('$connections')['documentdb']['connectionId']"
+                          }
+                      },
+                      "method": "get",
+                      "path": "/dbs/@{encodeURIComponent(variables('CosmosDBDatabase'))}/colls/@{encodeURIComponent(variables('CosmosDBContainer'))}/docs"
+                  },
+                  "runAfter": {
+                      "Initialize_variable_-_Cosmos_DB_Container": [
+                          "Succeeded"
+                      ],
+                      "Initialize_variable_-_Cosmos_DB_Database": [
+                          "Succeeded"
+                      ]
+                  },
+                  "type": "ApiConnection"
+              },
+              "Initialize_variable_-_Cosmos_DB_Container": {
+                  "inputs": {
+                      "variables": [
+                          {
+                              "name": "CosmosDBContainer",
+                              "type": "string",
+                              "value": "[parameters('documentdb_1_containerName')]"
+                          }
+                      ]
+                  },
+                  "runAfter": {},
+                  "type": "InitializeVariable"
+              },
+              "Initialize_variable_-_Cosmos_DB_Database": {
+                  "inputs": {
+                      "variables": [
+                          {
+                              "name": "CosmosDBDatabase",
+                              "type": "string",
+                              "value": "[parameters('documentdb_1_databaseName')]"
+                          }
+                      ]
+                  },
+                  "runAfter": {},
+                  "type": "InitializeVariable"
+              },
+              "Response_200": {
+                  "inputs": {
+                      "body": "@outputs('Compose_-_response')",
+                      "statusCode": 200
+                  },
+                  "kind": "Http",
+                  "runAfter": {
+                      "Compose_-_response": [
+                          "Succeeded"
+                      ]
+                  },
+                  "type": "Response"
+              },
+              "Response_400": {
+                  "inputs": {
+                      "statusCode": 400
+                  },
+                  "kind": "Http",
+                  "runAfter": {
+                      "Get_all_documents": [
+                          "Failed",
+                          "Skipped",
+                          "TimedOut"
+                      ]
+                  },
+                  "type": "Response"
+              }
+          },
+          "contentVersion": "1.0.0.0",
+          "outputs": {},
+          "parameters": {
+              "$connections": {
+                  "defaultValue": {},
+                  "type": "Object"
+              }
+          },
+          "triggers": {
+              "manual": {
+                  "description": "test",
+                  "inputs": {
+                      "method": "GET",
+                      "schema": {}
+                  },
+                  "kind": "Http",
+                  "type": "Request"
+              }
+          }
+        },
+        "parameters": {
+          "$connections": {
+            "value": {
+              "documentdb": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'documentdb')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('documentdb_1_Connection_Name'))]",
+                "connectionName": "[parameters('documentdb_1_Connection_Name')]"
+              }
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/connections', parameters('documentdb_1_Connection_Name'))]"
+      ],
+      "resources": [
+        {
+          "type": "providers/diagnosticSettings",
+          "name": "[concat('Microsoft.Insights/', parameters('diagnosticSettings_name'))]",
+          "dependsOn": [
+            "[parameters('logicAppName')]"
+          ],
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "[parameters('diagnosticSettings_name')]",
+            "workspaceId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', parameters('diagnosticSettings_resourceGroupName'), '/providers/Microsoft.OperationalInsights/workspaces/', parameters('diagnosticSettings_workspaceName'))]",
+            "logs": [
+              {
+                "category": "WorkflowRuntime",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ],
+            "metrics": [
+              {
+                "category": "AllMetrics",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 0,
+                  "enabled": false
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }, 
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('documentdb_1_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'documentdb')]"
+        },
+        "displayName": "[parameters('documentdb_1_Connection_DisplayName')]",
+        "parameterValues": {
+          "databaseAccount": "[parameters('documentdb_1_databaseAccount')]",
+          "accessKey": "[parameters('documentdb_1_accessKey')]"
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
