@@ -33,7 +33,7 @@
   "resources": [
     {
       "properties": {
-        "description": "An implementation of an synchronous pattern with Azure Integration Services to get a customers from Cosmos DB.",
+        "description": "An implementation of an async and sync pattern with Azure Integration Services to create and get a new customer.",
         "authenticationSettings": {
           "subscriptionKeyRequired": false
         },
@@ -61,27 +61,29 @@
         "templateParameters": [],
         "description": "Trigger a run of the logic app.",
         "request": {
-          "description": "The request body.",
           "queryParameters": [],
-          "headers": []
+          "headers": [],
+          "representations": []
         },
         "responses": [
           {
             "statusCode": 200,
-            "description": "The Logic App Response.",
-            "headers": []
+            "description": "",
+            "headers": [],
+            "representations": []
           },
           {
             "statusCode": 400,
-            "description": "The Logic App Response.",
-            "headers": []
+            "description": "",
+            "headers": [],
+            "representations": []
           }
         ],
         "displayName": "[parameters('ApiOperation')]",
         "method": "GET",
-        "urlTemplate": "[concat('/',parameters('ApiOperation'))]"
+        "urlTemplate": "[concat('/',parameters('ApiOperation'))]",
       },
-      "name": "[concat(parameters('ApimServiceName'), '/', parameters('logicAppName'), '/manual-invoke')]",
+      "name": "[concat(parameters('ApimServiceName'), '/', parameters('LogicAppName'), '/', parameters('ApiOperation'))]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
