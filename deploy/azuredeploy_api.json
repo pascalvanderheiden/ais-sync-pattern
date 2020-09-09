@@ -33,7 +33,7 @@
   "resources": [
     {
       "properties": {
-        "description": "An implementation of an asynchronous pattern with Azure Integration Services to create a new customer.",
+        "description": "An implementation of an synchronous pattern with Azure Integration Services to get a customers from Cosmos DB.",
         "authenticationSettings": {
           "subscriptionKeyRequired": false
         },
@@ -70,10 +70,15 @@
             "statusCode": 200,
             "description": "The Logic App Response.",
             "headers": []
+          },
+          {
+            "statusCode": 400,
+            "description": "The Logic App Response.",
+            "headers": []
           }
         ],
         "displayName": "[parameters('ApiOperation')]",
-        "method": "POST",
+        "method": "GET",
         "urlTemplate": "[concat('/',parameters('ApiOperation'))]"
       },
       "name": "[concat(parameters('ApimServiceName'), '/', parameters('logicAppName'), '/manual-invoke')]",
@@ -85,7 +90,7 @@
     },
     {
       "properties": {
-        "value": "[concat('<policies>\r\n\t<inbound>\r\n\t\t<base />\r\n\t\t<set-method id=\"apim-generated-policy\">POST</set-method>\r\n\t\t<rewrite-uri id=\"apim-generated-policy\" template=\"',parameters('BackendServiceURLPath'),'\" />\r\n\t\t<set-header id=\"apim-generated-policy\" name=\"Ocp-Apim-Subscription-Key\" exists-action=\"delete\" />\r\n\t</inbound>\r\n\t<backend>\r\n\t\t<base />\r\n\t</backend>\r\n\t<outbound>\r\n\t\t<base />\r\n\t</outbound>\r\n\t<on-error>\r\n\t\t<base />\r\n\t</on-error>\r\n</policies>')]",
+        "value": "[concat('<policies>\r\n\t<inbound>\r\n\t\t<base />\r\n\t\t<set-method id=\"apim-generated-policy\">GET</set-method>\r\n\t\t<rewrite-uri id=\"apim-generated-policy\" template=\"',parameters('BackendServiceURLPath'),'\" />\r\n\t\t<set-header id=\"apim-generated-policy\" name=\"Ocp-Apim-Subscription-Key\" exists-action=\"delete\" />\r\n\t</inbound>\r\n\t<backend>\r\n\t\t<base />\r\n\t</backend>\r\n\t<outbound>\r\n\t\t<base />\r\n\t</outbound>\r\n\t<on-error>\r\n\t\t<base />\r\n\t</on-error>\r\n</policies>')]",
         "format": "rawxml"
       },
       "name": "[concat(parameters('ApimServiceName'), '/',parameters('logicAppName'),'/manual-invoke/policy')]",
