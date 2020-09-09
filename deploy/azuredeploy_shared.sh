@@ -71,7 +71,6 @@ az provider register -n Microsoft.DocumentDB
 az provider register -n Microsoft.ApiManagement
 az provider register -n Microsoft.Logic
 az provider register -n Microsoft.OperationsManagement
-az provider register -n Microsoft.EventGrid
 az provider register -n Microsoft.keyvault
 
 #--------------------------------------------
