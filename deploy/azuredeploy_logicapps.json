@@ -220,7 +220,7 @@
           },
           "triggers": {
               "manual": {
-                  "description": "test",
+                  "description": "Your comments go here...",
                   "inputs": {
                       "method": "GET",
                       "schema": {}
