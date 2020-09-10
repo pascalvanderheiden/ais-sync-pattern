@@ -33,7 +33,7 @@
   "resources": [
     {
       "properties": {
-        "description": "An implementation of an async and sync pattern with Azure Integration Services to create and get a new customer.",
+        "description": "Azure Logic App.",
         "authenticationSettings": {
           "subscriptionKeyRequired": false
         },
@@ -61,29 +61,32 @@
         "templateParameters": [],
         "description": "Trigger a run of the logic app.",
         "request": {
+          "description": "The request body.",
           "queryParameters": [],
-          "headers": [],
-          "representations": []
+          "headers": []
         },
         "responses": [
           {
             "statusCode": 200,
-            "description": "",
-            "headers": [],
-            "representations": []
+            "description": "The Logic App Response.",
+            "headers": []
           },
           {
             "statusCode": 400,
-            "description": "",
-            "headers": [],
-            "representations": []
+            "description": "The Logic App Response.",
+            "headers": []
+          },
+          {
+            "statusCode": 500,
+            "description": "The Logic App Response.",
+            "headers": []
           }
         ],
-        "displayName": "[parameters('ApiOperation')]",
+        "displayName": "[parameters('logicAppName')]",
         "method": "GET",
-        "urlTemplate": "[concat('/',parameters('ApiOperation'))]",
+        "urlTemplate": "[concat('/',parameters('ApiOperation'))]"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/', parameters('LogicAppName'), '/', parameters('ApiOperation'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/', parameters('logicAppName'), '/manual-invoke')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
@@ -95,7 +98,7 @@
         "value": "[concat('<policies>\r\n\t<inbound>\r\n\t\t<base />\r\n\t\t<set-method id=\"apim-generated-policy\">GET</set-method>\r\n\t\t<rewrite-uri id=\"apim-generated-policy\" template=\"',parameters('BackendServiceURLPath'),'\" />\r\n\t\t<set-header id=\"apim-generated-policy\" name=\"Ocp-Apim-Subscription-Key\" exists-action=\"delete\" />\r\n\t</inbound>\r\n\t<backend>\r\n\t\t<base />\r\n\t</backend>\r\n\t<outbound>\r\n\t\t<base />\r\n\t</outbound>\r\n\t<on-error>\r\n\t\t<base />\r\n\t</on-error>\r\n</policies>')]",
         "format": "rawxml"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/',parameters('logicAppName'),'/manual-invoke/policy')]",
+      "name": "[concat(parameters('ApimServiceName'), '/', parameters('logicAppName'), '/manual-invoke/policy')]",
       "type": "Microsoft.ApiManagement/service/apis/operations/policies",
       "apiVersion": "2019-01-01",
       "dependsOn": [

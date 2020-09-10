@@ -59,14 +59,14 @@
     },
     "diagnosticSettings_resourceGroupName": {
       "type": "string",
-      "defaultValue": "ais-async-rg",
+      "defaultValue": "aisshared-rg",
       "metadata": {
         "description": "Resource Group of the Log Analytics Workspace"
       }
     },
     "diagnosticSettings_workspaceName": {
       "type": "string",
-      "defaultValue": "aisasync-ws",
+      "defaultValue": "aisshared-ws",
       "metadata": {
         "description": "Log Analytics Workspace"
       }
@@ -80,7 +80,7 @@
     },
     "documentdb_1_Connection_DisplayName": {
       "type": "string",
-      "defaultValue": "aisasyncosmos-acc",
+      "defaultValue": "aisshared-acc",
       "metadata": {
         "description": "Cosmos DB Connection Display Name in Logic App"
       }
@@ -90,14 +90,14 @@
       "metadata": {
         "description": "Name of the account without 'documents.azure.com' part"
       },
-      "defaultValue": "aisasyncosmos-acc"
+      "defaultValue": "aisshared-acc"
     },
     "documentdb_1_databaseName": {
       "type": "string",
       "metadata": {
         "description": "Name of the Cosmos DB database"
       },
-      "defaultValue": "aisasync-db"
+      "defaultValue": "aisshared-db"
     },
     "documentdb_1_containerName": {
       "type": "string",

@@ -9,6 +9,8 @@ https://github.com/Azure/azure-api-management-devops-resource-kit
 
 https://azure.microsoft.com/en-us/blog/build-a-ci-cd-pipeline-for-api-management/
 
+You can also use the API Management Extention in Visual Studio Code, it has the Extract tool embedded in the extention.
+
 ## Azure Architecture
 ![ais-sync-pattern](docs/images/arch.png)
 
@@ -21,7 +23,8 @@ In this case I've used Cosmos DB to get the messages from, but this can be repla
 
 In DevOps with the build pipeline all shared resources are deployed. The release pipeline deploys the specific services needed for this pattern. In this way are able to deploy, by cloning, multiple sync pattern, using the same shared components for cost optimalization.
 
-In this DevOps project I've made it possible to deploy to 3 environments by choice. So, you can deploy to a dev, staging and production enviroment in the DevOps project. There are 3 build pipelines which wil provide the deployment of completely seperate enviroments. All shared components are deployed in the build pipelines. In the release pipeline we will do a staged deployment of each environment, with a approval in between. This way you can choose if you want to deploy duplicate environments or not.  
+In this DevOps project I've made it possible to deploy to 3 environments by choice. So, you can deploy to a dev, staging and production enviroment in the DevOps project. There are 3 build pipelines which wil provide the deployment of completely seperate enviroments. All shared components are deployed in the build pipelines. In the release pipeline we will do a staged deployment of each environment, with a approval in between. This way you can choose if you want to deploy duplicate environments or not.
+![ais-sync-pattern](docs/images/devops.png)
 
 ## Step by Step installation
 
@@ -82,15 +85,15 @@ You can find the documentation on the Azure DevOps Generator here: https://vstsd
 
 ### Step 7: In Azure DevOps, update the Release pipeline and Run it.
 - Go to Pipelines, Releases.
-Note. Because I've enabled continuous deployment in my template, there is a failed release there already. You can ignore that, because we are going to fix the release in the step.
 - Select "Release AIS Synchronous pattern-CD", Edit.
 - In Tasks, select the Tasks which have the explaination mark "Some settings need attention", and update Azure Subscription to your Service Principal Connection.
 - In Variables, update the variables to match the naming you used in the Build pipeline.
-- In Variables groups, link the "Key Vault Secrets" variable group, by clicking the Link button. Scope it to the specific environment stage.
+- In Variables groups, link the "Key Vault Secrets" variable groups, by clicking the Link button. Scope it to the specific environment stage.
+- In the Pipeline, Click on the Pre-deployment conditions (blub next to each stage), and Check Pre-deployment approvals and enter your e-mail as approver.
 - Save & Create Release.
 
 ### Step 8: Go to your API Management Instance and test the API
-In the Azure Portal, just go to API Management, APIs, click your new API (Customer), Click the operation GET and click the tab "Test" and click Send.
+In the Azure Portal, just go to API Management, APIs, click your new API, Click the operation GET and click the tab "Test" and click Send.
 
 ## Contributing
 This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
