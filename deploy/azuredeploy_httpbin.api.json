@@ -33,7 +33,7 @@
           "https"
         ]
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin', ';rev=2')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
       "dependsOn": []
@@ -81,6 +81,11 @@
           {
             "statusCode": 200,
             "description": "Response OK.",
+            "headers": []
+          },
+          {
+            "statusCode": 500,
+            "description": "Internal Error",
             "headers": []
           }
         ],
