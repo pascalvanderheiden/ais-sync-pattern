@@ -23,8 +23,8 @@
           "header": "Ocp-Apim-Subscription-Key",
           "query": "subscription-key"
         },
-        "apiRevision": "1",
-        "isCurrent": true,
+        "apiRevision": "2",
+        "isCurrent": false,
         "subscriptionRequired": false,
         "displayName": "httpbin",
         "serviceUrl": "https://httpbin.org",
@@ -77,7 +77,13 @@
           "headers": [],
           "representations": []
         },
-        "responses": [],
+        "responses": [
+          {
+            "statusCode": 200,
+            "description": "Response OK.",
+            "headers": []
+          }
+        ],
         "displayName": "/base64",
         "method": "GET",
         "urlTemplate": "/base64/{value}"
