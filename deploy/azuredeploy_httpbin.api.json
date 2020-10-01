@@ -1,0 +1,635 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "ApimServiceName": {
+      "type": "string"
+    },
+    "ApimResourceGroup": {
+      "type": "string"
+    },
+    "ApplicationInsightsName": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "properties": {
+        "description": "API Management facade for a very handy and free online HTTP tool.",
+        "authenticationSettings": {
+          "subscriptionKeyRequired": false
+        },
+        "subscriptionKeyParameterNames": {
+          "header": "Ocp-Apim-Subscription-Key",
+          "query": "subscription-key"
+        },
+        "apiRevision": "1",
+        "isCurrent": true,
+        "subscriptionRequired": false,
+        "displayName": "httpbin",
+        "serviceUrl": "https://httpbin.org",
+        "path": "httpbin",
+        "protocols": [
+          "https"
+        ]
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": []
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns request data, including method used.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/anything",
+        "method": "GET",
+        "urlTemplate": "/anything"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/anything')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "value",
+            "description": "Base64 encoded string.",
+            "type": "string",
+            "defaultValue": "aGVsbG8gd29ybGQNCg%3D%3D",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "Decodes base64url-encoded string.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/base64",
+        "method": "GET",
+        "urlTemplate": "/base64/{value}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/base64')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns brotli-encoded data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/brotli",
+        "method": "GET",
+        "urlTemplate": "/brotli"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/brotli')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "number",
+            "description": "Number of bytes to return.",
+            "type": "string",
+            "defaultValue": "1024",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "Generates n random bytes of binary data",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/bytes",
+        "method": "GET",
+        "urlTemplate": "/bytes/{number}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/bytes')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "maxAge",
+            "description": "",
+            "type": "string",
+            "defaultValue": "10",
+            "required": true,
+            "values": [
+              "10"
+            ]
+          }
+        ],
+        "description": "Sets a Cache-Control header for n seconds.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/cache",
+        "method": "GET",
+        "urlTemplate": "/cache/{maxAge}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/cache')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns deflate-encoded data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/deflate",
+        "method": "GET",
+        "urlTemplate": "/deflate"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/deflate')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "seconds",
+            "description": "",
+            "type": "string",
+            "defaultValue": "2",
+            "required": true,
+            "values": [
+              "2"
+            ]
+          }
+        ],
+        "description": "Delays responding for n–10 seconds.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/delay",
+        "method": "GET",
+        "urlTemplate": "/delay/{seconds}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/delay')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns DELETE data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/delete",
+        "method": "DELETE",
+        "urlTemplate": "/delete"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/delete')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns GET data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/get",
+        "method": "GET",
+        "urlTemplate": "/get"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/get')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns gzip-encoded data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/gzip",
+        "method": "GET",
+        "urlTemplate": "/gzip"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/gzip')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns headers dictionary.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/headers",
+        "method": "GET",
+        "urlTemplate": "/headers"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/headers')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns origin IP.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/ip",
+        "method": "GET",
+        "urlTemplate": "/ip"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/ip')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns PATCH data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/patch",
+        "method": "PATCH",
+        "urlTemplate": "/patch"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/patch')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns POST data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/post",
+        "method": "POST",
+        "urlTemplate": "/post"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/post')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns PUT data.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/put",
+        "method": "PUT",
+        "urlTemplate": "/put"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/put')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "url",
+            "description": "Redirect target",
+            "type": "string",
+            "defaultValue": "http://example.com",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "302 redirects to a URL provided in query",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/redirect-to",
+        "method": "GET",
+        "urlTemplate": "/redirect-to?url={url}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/redirect-to')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns key-value query parameters as response headers.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/response-headers",
+        "method": "GET",
+        "urlTemplate": "/response-headers"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/response-headers')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "code",
+            "description": "HTTP code to return.",
+            "type": "number",
+            "defaultValue": "200",
+            "required": true,
+            "values": [
+              "200"
+            ]
+          }
+        ],
+        "description": "Returns provided HTTP Status code.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/status",
+        "method": "GET",
+        "urlTemplate": "/status/{code}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/status')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [
+          {
+            "name": "number",
+            "description": "Number of lines to stream.",
+            "type": "number",
+            "defaultValue": "10",
+            "required": true,
+            "values": []
+          }
+        ],
+        "description": "Streams min(number, 100) lines.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/stream",
+        "method": "GET",
+        "urlTemplate": "/stream/{number}"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/stream')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns user agent string.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/user-agent",
+        "method": "GET",
+        "urlTemplate": "/user-agent"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/user-agent')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns UUID4.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/uuid",
+        "method": "GET",
+        "urlTemplate": "/uuid"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/uuid')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "templateParameters": [],
+        "description": "Returns some XML.",
+        "request": {
+          "queryParameters": [],
+          "headers": [],
+          "representations": []
+        },
+        "responses": [],
+        "displayName": "/xml",
+        "method": "GET",
+        "urlTemplate": "/xml"
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/xml')]",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/starter/httpbin')]",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {},
+      "name": "[concat(parameters('ApimServiceName'), '/unlimited/httpbin')]",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    },
+    {
+      "properties": {
+        "alwaysLog": "allErrors",
+        "loggerId": "[concat('/subscriptions/',subscription().id,'/resourceGroups/',parameters('ApimResourceGroup'),'/providers/Microsoft.ApiManagement/service/',parameters('ApimServiceName'),'/loggers/',parameters('ApplicationInsightsName'))]",
+        "sampling": {
+          "samplingType": "fixed",
+          "percentage": 100.0
+        },
+        "frontend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        },
+        "backend": {
+          "request": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          },
+          "response": {
+            "headers": [],
+            "body": {
+              "bytes": 0
+            }
+          }
+        }
+      },
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/applicationinsights')]",
+      "type": "Microsoft.ApiManagement/service/apis/diagnostics",
+      "apiVersion": "2019-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
+      ]
+    }
+  ]
+}
