@@ -11,13 +11,6 @@
     "ApplicationInsightsName": {
       "type": "string"
     },
-    "apiRevision": {
-      "type": "string",
-      "defaultValue": "2",
-      "metadata": {
-        "description": "API Revision"
-      }
-    },
     "apiVersion": {
       "type": "string",
       "defaultValue": "v1",
@@ -54,10 +47,9 @@
           "header": "Ocp-Apim-Subscription-Key",
           "query": "subscription-key"
         },
-        "apiRevision": "[parameters('apiRevision')]",
         "apiVersion": "[parameters('apiVersion')]",
         "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]",
-        "isCurrent": false,
+        "isCurrent": true,
         "subscriptionRequired": false,
         "displayName": "httpbin",
         "serviceUrl": "https://httpbin.org",
@@ -66,7 +58,7 @@
           "https"
         ]
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin', ';rev=', parameters('apiRevision'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
       "dependsOn": [
