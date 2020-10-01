@@ -10,9 +10,40 @@
     },
     "ApplicationInsightsName": {
       "type": "string"
+    },
+    "apiRevision": {
+      "type": "string",
+      "defaultValue": "2",
+      "metadata": {
+        "description": "API Revision"
+      }
+    },
+    "apiVersion": {
+      "type": "string",
+      "defaultValue": "v1",
+      "metadata": {
+        "description": "API Version"
+      }
+    },
+    "apiVersionSetName": {
+      "type": "string",
+      "defaultValue": "v1",
+      "metadata": {
+        "description": "API Management Version Set Name"
+      }
     }
   },
   "resources": [
+    {
+      "name": "[concat(parameters('ApimServiceName'), '/', parameters('apiVersionSetName'))]",
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "apiVersion": "2019-01-01",
+      "properties": {
+        "description": "version sets of my apis.",
+        "displayName": "[parameters('apiVersionSetName')]",
+        "versioningScheme": "Segment"
+      }
+    },
     {
       "properties": {
         "description": "API Management facade for a very handy and free online HTTP tool.",
@@ -23,7 +54,9 @@
           "header": "Ocp-Apim-Subscription-Key",
           "query": "subscription-key"
         },
-        "apiRevision": "2",
+        "apiRevision": "[parameters('apiRevision')]",
+        "apiVersion": "[parameters('apiVersion')]",
+        "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]",
         "isCurrent": false,
         "subscriptionRequired": false,
         "displayName": "httpbin",
@@ -33,10 +66,12 @@
           "https"
         ]
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin', ';rev=2')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin', ';rev=', parameters('apiRevision'))]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
-      "dependsOn": []
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]"
+      ]
     },
     {
       "properties": {
