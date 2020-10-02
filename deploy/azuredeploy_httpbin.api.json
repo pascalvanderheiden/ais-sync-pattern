@@ -28,16 +28,6 @@
   },
   "resources": [
     {
-      "name": "[concat(parameters('ApimServiceName'), '/', parameters('apiVersionSetName'))]",
-      "type": "Microsoft.ApiManagement/service/apiVersionSets",
-      "apiVersion": "2019-01-01",
-      "properties": {
-        "description": "version sets of my apis.",
-        "displayName": "[parameters('apiVersionSetName')]",
-        "versioningScheme": "Segment"
-      }
-    },
-    {
       "properties": {
         "description": "API Management facade for a very handy and free online HTTP tool.",
         "authenticationSettings": {
@@ -47,6 +37,7 @@
           "header": "Ocp-Apim-Subscription-Key",
           "query": "subscription-key"
         },
+        "apiRevision": "1",
         "apiVersion": "[parameters('apiVersion')]",
         "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]",
         "isCurrent": true,
@@ -61,9 +52,7 @@
       "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
-      "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]"
-      ]
+      "dependsOn": []
     },
     {
       "properties": {
