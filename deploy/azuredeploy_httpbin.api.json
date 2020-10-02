@@ -20,9 +20,9 @@
     },
     "apiVersionSetName": {
       "type": "string",
-      "defaultValue": "v1",
+      "defaultValue": "httpbin",
       "metadata": {
-        "description": "API Management Version Set Name"
+        "description": "API Management Version Set Name voor httpbin"
       }
     }
   },
@@ -40,7 +40,7 @@
         "apiRevision": "1",
         "apiVersion": "[parameters('apiVersion')]",
         "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]",
-        "isCurrent": true,
+        "isCurrent": false,
         "subscriptionRequired": false,
         "displayName": "httpbin",
         "serviceUrl": "https://httpbin.org",
@@ -52,7 +52,19 @@
       "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
-      "dependsOn": []
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]"
+      ]
+    },
+    {
+      "name": "[concat(parameters('ApimServiceName'), '/', parameters('apiVersionSetName'))]",
+      "type": "Microsoft.ApiManagement/service/apiVersionSets",
+      "apiVersion": "2019-01-01",
+      "properties": {
+        "description": "version sets of my apis.",
+        "displayName": "[parameters('apiVersionSetName')]",
+        "versioningScheme": "Segment"
+      }
     },
     {
       "properties": {
