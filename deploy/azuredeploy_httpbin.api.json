@@ -20,7 +20,7 @@
     },
     "apiRevision": {
       "type": "string",
-      "defaultValue": "3",
+      "defaultValue": "2",
       "metadata": {
         "description": "API Version"
       }
@@ -45,6 +45,7 @@
           "query": "subscription-key"
         },
         "apiRevision": "1",
+        "isCurrent": true,
         "apiVersion": "[parameters('apiVersion')]",
         "apiVersionSetId": "[resourceId('Microsoft.ApiManagement/service/apiVersionSets', parameters('ApimServiceName'), parameters('apiVersionSetName'))]",
         "subscriptionRequired": false,
@@ -55,7 +56,7 @@
           "https"
         ]
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin')]",
       "type": "Microsoft.ApiManagement/service/apis",
       "apiVersion": "2019-01-01",
       "dependsOn": [
@@ -86,11 +87,11 @@
         "method": "GET",
         "urlTemplate": "/anything"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/anything')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/anything')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -118,7 +119,7 @@
             "headers": []
           },
           {
-            "statusCode": 501,
+            "statusCode": 500,
             "description": "Internal Error",
             "headers": []
           }
@@ -127,11 +128,11 @@
         "method": "GET",
         "urlTemplate": "/base64/{value}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/base64')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/base64')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -148,11 +149,11 @@
         "method": "GET",
         "urlTemplate": "/brotli"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/brotli')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/brotli')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -178,11 +179,11 @@
         "method": "GET",
         "urlTemplate": "/bytes/{number}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/bytes')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/bytes')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -210,11 +211,11 @@
         "method": "GET",
         "urlTemplate": "/cache/{maxAge}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/cache')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/cache')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -231,11 +232,11 @@
         "method": "GET",
         "urlTemplate": "/deflate"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/deflate')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/deflate')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -263,11 +264,11 @@
         "method": "GET",
         "urlTemplate": "/delay/{seconds}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/delay')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/delay')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -284,11 +285,11 @@
         "method": "DELETE",
         "urlTemplate": "/delete"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/delete')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/delete')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -305,11 +306,11 @@
         "method": "GET",
         "urlTemplate": "/get"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/get')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/get')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -326,11 +327,11 @@
         "method": "GET",
         "urlTemplate": "/gzip"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/gzip')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/gzip')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -347,11 +348,11 @@
         "method": "GET",
         "urlTemplate": "/headers"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/headers')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/headers')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -368,11 +369,11 @@
         "method": "GET",
         "urlTemplate": "/ip"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/ip')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/ip')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -389,11 +390,11 @@
         "method": "PATCH",
         "urlTemplate": "/patch"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/patch')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/patch')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -410,11 +411,11 @@
         "method": "POST",
         "urlTemplate": "/post"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/post')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/post')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -431,11 +432,11 @@
         "method": "PUT",
         "urlTemplate": "/put"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/put')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/put')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -461,11 +462,11 @@
         "method": "GET",
         "urlTemplate": "/redirect-to?url={url}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/redirect-to')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/redirect-to')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -482,11 +483,11 @@
         "method": "GET",
         "urlTemplate": "/response-headers"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/response-headers')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/response-headers')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -514,11 +515,11 @@
         "method": "GET",
         "urlTemplate": "/status/{code}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/status')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/status')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -544,11 +545,11 @@
         "method": "GET",
         "urlTemplate": "/stream/{number}"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/stream')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/stream')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -565,11 +566,11 @@
         "method": "GET",
         "urlTemplate": "/user-agent"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/user-agent')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/user-agent')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -586,11 +587,11 @@
         "method": "GET",
         "urlTemplate": "/uuid"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin;rev=', parameters('apiRevision'), '/uuid')]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/uuid')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -607,29 +608,29 @@
         "method": "GET",
         "urlTemplate": "/xml"
       },
-      "name": "[concat(parameters('ApimServiceName'), '/httpbin/xml;rev=', parameters('apiRevision'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/httpbin/xml')]",
       "type": "Microsoft.ApiManagement/service/apis/operations",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
       "properties": {},
-      "name": "[concat(parameters('ApimServiceName'), '/starter/httpbin;rev=', parameters('apiRevision'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/starter/httpbin')]",
       "type": "Microsoft.ApiManagement/service/products/apis",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
       "properties": {},
-      "name": "[concat(parameters('ApimServiceName'), '/unlimited/httpbin;rev=', parameters('apiRevision'))]",
+      "name": "[concat(parameters('ApimServiceName'), '/unlimited/httpbin')]",
       "type": "Microsoft.ApiManagement/service/products/apis",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     },
     {
@@ -673,7 +674,7 @@
       "type": "Microsoft.ApiManagement/service/apis/diagnostics",
       "apiVersion": "2019-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin;rev=', parameters('apiRevision'))]"
+        "[resourceId('Microsoft.ApiManagement/service/apis', parameters('ApimServiceName'), 'httpbin')]"
       ]
     }
   ]
