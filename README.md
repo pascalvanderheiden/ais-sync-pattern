@@ -21,9 +21,11 @@ This architecture focusses on retrrieving data from a Cosmos DB and returning th
 
 In this case I've used Cosmos DB to get the messages from, but this can be replace with any backend application / database.
 
+Next to the asynchronous api, I've added httpbin as well.
+
 In DevOps with the build pipeline all shared resources are deployed. The release pipeline deploys the specific services needed for this pattern. In this way are able to deploy, by cloning, multiple sync pattern, using the same shared components for cost optimalization.
 
-In this DevOps project I've made it possible to deploy to 3 environments by choice. So, you can deploy to a dev, staging and production enviroment in the DevOps project. There are 3 build pipelines which wil provide the deployment of completely seperate enviroments. All shared components are deployed in the build pipelines. In the release pipeline we will do a staged deployment of each environment, with a approval in between. This way you can choose if you want to deploy duplicate environments or not.
+In this DevOps project we'll deploy to 3 environments. So, you can deploy to a dev, staging and production enviroment in the DevOps project. The build pipeline will create and provision all environments in one go. All shared components per environment are deployed in the build pipelines. In the release pipeline we will do a staged deployment of each environment, with a approval in between. This way you can choose if you want to deploy duplicate environments or not.
 ![ais-sync-pattern](docs/images/devops.png)
 
 ## Step by Step installation
@@ -31,7 +33,7 @@ In this DevOps project I've made it possible to deploy to 3 environments by choi
 ### Before we hit it off
 This integration returns data from Cosmos DB. This database is not pre-populated. You can implement the asynchronous pattern first, to get data in via the API (https://github.com/pascalvanderheiden/ais-async-pattern). Or you can just add data manually via the Data Explorer in the Azure Portal. There is a sample json included in this repository.
 
-Another important note: if you've already implemeted the asynchronous pattern (https://github.com/pascalvanderheiden/ais-async-pattern), this tutorial will be complementary to that setup.
+Another important note: if you've already implemented the asynchronous pattern (https://github.com/pascalvanderheiden/ais-async-pattern), this tutorial will be complementary to that setup.
 
 ### Step 1: In the Azure Portal create a Service Principal
 In the Azure Cloud Shell (https://shell.azure.com): 
@@ -62,18 +64,17 @@ You can find the documentation on the Azure DevOps Generator here: https://vstsd
 - Tick "Allow access to all pipelines.
 - Update the values of the variables to match your naming conventions needs. I've put in some generic naming, but you need to update the variables. Otherwise, the creation of some services will fail, because they've been already used.
 - The variable "KVCOSMOSDBLABEL" is used as a label for Key Vault to retrieve the connection string and key for API Connections. Leave that as it is: "aissharedcosmosdb"
-- Do the same for the "Environments" Variable group.
+- Do the same for the "Environments" Variable group. Keep in min that these values are used as a prefix for all environment related shared components. So, in this DevOps project I choose one dev, one staging and one production (where I leave the prefix blank). If you don't want 3 environments but only 1, just give them all the same prefix (blank for example). 
 - Don't forget to save.
 
 ### Step 5: In Azure DevOps, update the Build pipeline and Run it.
 - Go to Pipelines, Pipelines.
-- Select "Build AIS shared resources-env1-CI", Edit.
+- Select "Build AIS shared resources-CI", Edit.
 - In Tasks, select the Tasks which have the explaination mark "Some settings need attention", and update Azure Subscription to your Service Principal Connection.
 - In Variables, update the variables to match your naming conventions needs. Keep in mind to pick unique naming for exposed services. I've put in some generic naming, but you need to update the variables. Otherwise, the creation of some services will fail, because they've been already used.
-- Repeat this for "Build AIS shared resources-env2-CI" and "Build AIS shared resources-env3-CI".
 - Save & queue.
-- Click the Agent Job to check the progress. Check if everything is create correctly, because of the unique naming for some services. And because it's fun :-)
-- Keep in mind that the CLI scripts will check if the resource is already created, before creating. I've used an ARM Template for the deployment of the Application Insights, because I wanted to automatically integrate it with the API Management Instance I've just created. This is not yet supported in AZ CLI.
+- Click the Agent Job to check the progress. Check if everything is created correctly, because of the unique naming for some services.
+- Keep in mind that the CLI scripts will check if the resource is already created, before creating. I've used an ARM Template for the deployment of the Application Insights, because I wanted to automatically integrate it with the API Management Instance I've just created. This is not yet supported in AZ CLI at the moment of writing this blog.
 
 ### Step 6: In Azure DevOps, add the Key Vault secret to the variables.
 - Go to Pipelines, Library. Add Variable group. Give it a name, something like "Key Vault Secrets Environment 1".
