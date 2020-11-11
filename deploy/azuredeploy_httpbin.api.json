@@ -117,11 +117,6 @@
             "statusCode": 200,
             "description": "Response OK.",
             "headers": []
-          },
-          {
-            "statusCode": 500,
-            "description": "Internal error.",
-            "headers": []
           }
         ],
         "displayName": "/base64",
